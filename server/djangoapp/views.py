@@ -1,12 +1,9 @@
 import json
 import logging
-from datetime import datetime
 
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import CarMake, CarModel
@@ -26,7 +23,10 @@ def get_cars(request):
     cars = []
 
     for car_model in car_models:
-        cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
+        cars.append({
+            "CarModel": car_model.name, 
+            "CarMake": car_model.car_make.name
+        })
     return JsonResponse({"CarModels": cars})
 
 
@@ -57,16 +57,13 @@ def logout_request(request):
 
 @csrf_exempt
 def registration(request):
-    context = {}
-
     data = json.loads(request.body)
     username = data["userName"]
     password = data["password"]
     first_name = data["firstName"]
     last_name = data["lastName"]
-    email = data[email]
+    email = data["email"]
     username_exist = False
-    email_exist = False
 
     try:
         User.objects.get(username=username)
@@ -129,7 +126,7 @@ def add_review(request):
         try:
             data = json.loads(request.body.decode("utf-8"))
             response = post_review(data)
-            return JsonResponse({"status": 200})
+            return JsonResponse({"status": 200, 'message': response})
         except json.JSONDecodeError:
             return JsonResponse({"status": 400, "message": "Invalid JSON"})
     return JsonResponse({"status": 405, "message": "Method Not Allowed"})
