@@ -1,6 +1,7 @@
 # Uncomment the imports below before you add the function code
 # import requests
 import os
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,11 +19,15 @@ def get_request(endpoint, **kwargs):
         for key, value in kwargs.items():
             params = f'{params}{key}={value}&'
 
-    request_url = f'{backend_url}{endpoint}?{params}'
+    request_url = f'{backend_url}{endpoint}'
+    if params:
+        request_url += f'?{params}'
     print(f'GET from {request_url}')
 
     try:
         response = requests.get(request_url)
+        print(f"📡 Status Code: {response.status_code}")  # Debugging status code
+        print(f"📦 Response JSON: {response.text}")
         return response.json()
     except:
         print('Network exception occured')
