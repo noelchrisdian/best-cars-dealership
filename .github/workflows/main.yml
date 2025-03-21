@@ -50,5 +50,5 @@ jobs:
       - name: Run Linter
         run: |
           # Exclude node_modules & enable ES6 support
-          find ./server/database -name "*.js" ! -path "*/node_modules/*" -exec jshint --esversion 6 {} +
+          jshint ./server/database/**/*.js
           echo "Linted all the js files successfully"
