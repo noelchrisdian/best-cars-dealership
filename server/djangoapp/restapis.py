@@ -26,7 +26,7 @@ def get_request(endpoint, **kwargs):
 
     try:
         response = requests.get(request_url)
-        print(f"📡 Status Code: {response.status_code}")  # Debugging status code
+        print(f"📡 Status Code: {response.status_code}")  
         print(f"📦 Response JSON: {response.text}")
         return response.json()
     except:
